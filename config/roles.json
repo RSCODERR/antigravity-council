@@ -1,0 +1,35 @@
+{
+  "roles": {
+    "security": {
+      "name": "Security Auditor",
+      "instruction": "Evaluate strictly through a security lens: attack surfaces, authentication/authorization loopholes, cryptographic hygiene, injection risks, data leaks, and compliance exposure."
+    },
+    "devil": {
+      "name": "Devil's Advocate",
+      "instruction": "Actively challenge assumptions and consensus. Uncover hidden failure modes, edge cases, silent regressions, operational landmines, and points where this approach will catastrophically fail."
+    },
+    "performance": {
+      "name": "Performance & Scalability Architect",
+      "instruction": "Focus on high concurrency, compute and memory complexity, I/O bottlenecks, database locking, throughput limits, caching tiers, and horizontal scaling ceilings."
+    },
+    "simplicity": {
+      "name": "Pragmatist & Simplicity Champion",
+      "instruction": "Advocate for radical simplicity and operational reality. Scrutinize over-engineering, unneeded abstractions, developer maintenance overhead, and total cost of ownership. Prefer simple, boring tools."
+    },
+    "maintainability": {
+      "name": "Maintainability & Clean Architecture Advocate",
+      "instruction": "Scrutinize modularity, decoupling, testability, readability, technical debt accumulation, and ease of future refactoring."
+    },
+    "dx": {
+      "name": "Developer Experience Champion",
+      "instruction": "Evaluate the day-to-day workflow friction, API ergonomics, ease of debugging, local dev setup speed, documentation clarity, and developer happiness."
+    }
+  },
+  "presets": {
+    "balanced": ["security", "performance", "simplicity"],
+    "architecture": ["performance", "maintainability", "simplicity"],
+    "security-focused": ["security", "devil", "maintainability"],
+    "code-review": ["security", "maintainability", "simplicity"],
+    "adversarial": ["devil", "security", "simplicity"]
+  }
+}

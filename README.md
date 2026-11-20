@@ -1,49 +1,56 @@
-# 🏛️ Antigravity Council
+# antigravity-council
 
-An Antigravity plugin that queries multiple AI models in parallel and synthesizes their answers. Get diverse perspectives on architecture decisions, debugging dead-ends, security reviews, and any question where one model's bias could mislead you.
+An Antigravity plugin that queries multiple AI models across specialized analytical roles (Security, Devil's Advocate, Performance, Simplicity) with anonymous cross-examination, delivering **one unified review**.
 
-> **Think of it as a panel of experts** — each AI model answers your question independently, then you get a synthesis of where they agree, where they disagree, and what to do about it.
+Compare answers when one model's bias could mislead you: architecture decisions, debugging dead ends, security reviews, or framework choices.
+
+Inspired by [hex/claude-council](https://github.com/hex/claude-council), but built natively for Antigravity without requiring external API keys.
+
+---
 
 ## What It Does
 
 ```
-You: "Ask the council: Should I use UUID or BIGINT primary keys for a SaaS users table?"
+You: "Council review: Is our authentication and session architecture sound?"
 
-┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│  🟢 Claude   │  │  🔵 Gemini   │  │  🟣 GPT-OSS  │
-│              │  │              │  │              │
-│  UUIDs for   │  │  BIGINTs for │  │  UUIDs, but  │
-│  distributed │  │  performance │  │  use UUIDv7  │
-│  systems...  │  │  on single   │  │  for sorted  │
-│              │  │  node...     │  │  inserts...  │
-└──────────────┘  └──────────────┘  └──────────────┘
-                        │
-                   🧭 Synthesis
-            Consensus: All agree indexing matters
-            Divergence: Scale assumptions differ
-            Recommendation: UUIDv7 if you might
-            distribute later; BIGINT if you won't
+┌──────────────────────┐  ┌──────────────────────┐  ┌──────────────────────┐
+│ 🛡️ Security Auditor  │  │  😈 Devil's Advocate │  │ ⚡ Simplicity / Perf │
+│                      │  │                      │  │                      │
+│ Algorithm confusion  │  │ Single point of      │  │ DB lookup on every   │
+│ & CSRF attack        │  │ failure if refresh   │  │ request kills edge   │
+│ vectors...           │  │ token leaks...       │  │ latency...           │
+└──────────────────────┘  └──────────────────────┘  └──────────────────────┘
+            │                        │                        │
+            └────────────────────────┼────────────────────────┘
+                                     │
+                          🔄 Anonymous Peer Review
+                     (Cross-critique & blind spots exposed)
+                                     │
+                        🏛️ Chairman Synthesis
+                      One Unified Master Verdict:
+               • Executive Decision & Direct Answer
+               • Synthesized Architecture Blueprint
+               • Role-Divided Insights & Tensions Reconciled
+               • Critical Trade-offs & Unresolved Risks
+               • Immediate Tactical Action Plan
 ```
 
-## Install
+Instead of dumping 4 conflicting walls of text, the council runs a 3-stage deliberation and delivers **one definitive, actionable verdict**.
+
+---
+
+## Features
+
+- **Multi-Role Deliberation**: Models don't just answer generically; each takes an adversarial lens (Security, Devil's Advocate, Simplicity, Scalability).
+- **Anonymous Peer Review**: Models critique each other's blinded drafts (Perspective A, B, C...) to eliminate sycophancy and groupthink.
+- **Unified Review**: A Chairman model synthesizes the findings into a single structured recommendation.
+- **Zero API Keys Needed**: Uses the models already included in your Antigravity subscription (Claude Opus, Claude Sonnet, Gemini Flash, GPT-OSS).
+
+---
+
+## Installation
 
 ### Option A: Clone to plugins directory
-
-```bash
-git clone https://github.com/akash/antigravity-council.git
-```
-
-Then copy or symlink to your Antigravity plugins directory:
-
-```bash
-# macOS / Linux
-cp -r antigravity-council ~/.gemini/config/plugins/antigravity-council
-
-# Windows (PowerShell)
-Copy-Item -Recurse antigravity-council $env:USERPROFILE\.gemini\config\plugins\antigravity-council
-```
-
-### Option B: Clone directly into plugins
 
 ```bash
 # macOS / Linux
@@ -53,20 +60,65 @@ git clone https://github.com/akash/antigravity-council.git ~/.gemini/config/plug
 git clone https://github.com/akash/antigravity-council.git $env:USERPROFILE\.gemini\config\plugins\antigravity-council
 ```
 
-The plugin loads automatically on the next Antigravity conversation.
+### Option B: Local link
+
+If you already cloned the repository:
+
+```bash
+# macOS / Linux
+ln -s /path/to/antigravity-council ~/.gemini/config/plugins/antigravity-council
+
+# Windows (PowerShell)
+Copy-Item -Recurse antigravity-council $env:USERPROFILE\.gemini\config\plugins\antigravity-council
+```
+
+The plugin loads automatically on your next Antigravity session.
+
+---
 
 ## Usage
 
 ### Ask the Council
 
-Just mention the council naturally:
+Mention the council naturally in your prompt:
 
 ```
-Ask the council: Should I use SQLite or Postgres for my demo app?
-Council review: Is our JWT implementation secure?
-Get the council's take on microservices vs monolith for our team size
-Run this past the council: Which caching strategy should we use?
+Ask the council: Should I use SQLite or Postgres for a multi-tenant B2B SaaS MVP?
+Council review: Is our password hashing strategy secure?
+Get the council's take on microservices vs modular monolith
+Run this past the council: Which caching tier should we deploy?
 ```
+
+### Role Presets
+
+You can ask the council to focus on specific angles:
+
+```
+Council review (security-focused): Audit our JWT refresh token implementation
+Ask the council (adversarial): Stress test our database migration plan
+Council review (architecture): Monolith vs event-driven microservices
+```
+
+Built-in presets (configured in `config/roles.json`):
+
+| Preset | Active Roles | Best For |
+|---|---|---|
+| `balanced` (default) | Security + Performance + Simplicity | General architectural decisions |
+| `security-focused` | Security + Devil's Advocate + Maintainability | Auth flows, sensitive data, compliance |
+| `architecture` | Performance + Maintainability + Simplicity | System design, database & infra choices |
+| `code-review` | Security + Maintainability + Simplicity | Pull requests, refactoring, diff reviews |
+| `adversarial` | Devil's Advocate + Security + Simplicity | Stress-testing plans against worst-case traps |
+
+### Available Roles
+
+| Role Key | Name | Focus Area |
+|---|---|---|
+| `security` | **Security Auditor** | Attack surfaces, auth loopholes, injections, data leaks |
+| `devil` | **Devil's Advocate** | Hidden failure modes, catastrophic traps, breaking consensus |
+| `performance` | **Performance Architect** | Concurrency, I/O bottlenecks, DB locks, caching limits |
+| `simplicity` | **Simplicity Champion** | Radical simplicity, eliminating over-engineering |
+| `maintainability` | **Clean Architecture** | Modularity, testability, technical debt, refactorability |
+| `dx` | **Developer Experience** | API ergonomics, local dev friction, debugging ease |
 
 ### Check Status
 
@@ -75,134 +127,45 @@ Council status
 What models are available for the council?
 ```
 
-### Debate Mode
+Outputs the available models, vendor diversity, and remaining quota.
 
-Ask for a debate to have models challenge each other:
+### Raw Transcripts
 
-```
-Have the council debate: REST vs GraphQL for our mobile API
-Council debate: Is our error handling strategy sound?
-```
-
-In debate mode, each model first answers independently (Round 1), then reads
-all other answers and critiques them (Round 2). The synthesis includes the
-strongest criticisms and whether any model changed its position.
-
-### Verbosity
+If you want to inspect each model's individual draft before the Chairman's synthesis:
 
 ```
-Brief council take on Redis vs Memcached
-Give me a detailed council review of our auth flow
+Ask the council (raw): Should we use Redis or Memcached?
 ```
 
-- **Brief**: 3–5 sentences, bullets only
-- **Standard** (default): Balanced and thorough
-- **Detailed**: Deep analysis with code examples and trade-offs
+---
 
-### Named Models
+## Output Format
 
-```
-Ask claude and gemini about our database schema
-What does GPT think about this approach?
-```
+The Chairman produces a single structured verdict:
 
-## How It Works
+1. **Executive Summary & Direct Verdict** — Unambiguous recommendation upfront.
+2. **Synthesized Architecture & Technical Blueprint** — Concrete technical solution with code/diagrams.
+3. **Role-Divided Insights & Tensions Reconciled** — Specific takeaways from the Security, Devil's Advocate, and Simplicity perspectives.
+4. **Critical Trade-offs & Unresolved Edge Cases** — Explicitly states what is sacrificed and what conditions would flip the decision.
+5. **Tactical Action Plan** — Prioritized, immediate implementation steps.
 
-1. **Fan out**: Your question goes to each selected AI model in parallel via
-   Antigravity's workflow system. Each model answers independently — they
-   can't see each other's responses.
+---
 
-2. **Collect**: All answers arrive simultaneously. Each is displayed verbatim
-   with its model name.
+## Comparison: `antigravity-council` vs `claude-council`
 
-3. **Synthesize**: The council produces a structured synthesis:
-   - **Consensus**: What the models agree on
-   - **Divergence**: Where and why they disagree
-   - **Recommendation**: What the evidence supports, plus the premise that
-     could flip the answer
+| Feature | `claude-council` (Claude Code) | `antigravity-council` (Antigravity) |
+|---|---|---|
+| **Host Environment** | Claude Code CLI | Google Antigravity |
+| **Model Orchestration** | Shell scripts (`curl`, `jq`, `tmux`, background PIDs) | Native Python workflow engine (`parallel`, `agent`) |
+| **Multi-Model Access** | Requires external API keys (OpenAI, Gemini, Grok, etc.) | Zero-config: uses Antigravity subscription models |
+| **Deliberation Protocol** | Role-divided deliberation + peer critique + synthesis | Exact same 3-stage protocol |
+| **Output Style** | Unified review or side-by-side terminal panes | Unified Master Review inline |
 
-## Available Models
-
-The council uses whatever models your Antigravity subscription includes.
-Typical seats:
-
-| Model | Vendor | Notes |
-|-------|--------|-------|
-| Claude Opus 4.6 | Anthropic | Deep reasoning, thinking model |
-| Claude Sonnet 4.6 | Anthropic | Fast, capable |
-| Gemini 3.8 Flash | Google | Fast, multiple quality tiers |
-| GPT-OSS 120B | OpenAI | Open-source weights |
-
-Run "council status" to see your current available models and quota.
-
-## When to Use the Council
-
-**Great for:**
-- Architecture decisions (monolith vs microservices, database choices)
-- Security reviews (auth flows, API design, data handling)
-- Debugging dead-ends (fresh eyes from different models)
-- Build vs buy decisions
-- Framework/library evaluation
-- Code review of critical paths
-
-**Not needed for:**
-- Simple implementation tasks
-- Questions with one clear answer
-- Quick fixes and small changes
-
-## Auto-Suggestions
-
-The plugin includes rules that automatically suggest the council when it
-detects you're facing a decision that would benefit from multiple perspectives.
-You can always decline — it's a suggestion, not an interruption.
-
-## Project Structure
-
-```
-antigravity-council/
-├── plugin.json                           # Plugin manifest
-├── README.md                             # This file
-├── LICENSE                               # MIT
-├── assets/
-│   └── logo.svg                          # Plugin icon
-├── skills/
-│   ├── council-ask/
-│   │   ├── SKILL.md                      # Main council query skill
-│   │   └── scripts/
-│   │       └── council_workflow.py       # Parallel query workflow
-│   └── council-status/
-│       └── SKILL.md                      # Status & available models
-└── rules/
-    └── AGENTS.md                         # Auto-suggestion rules
-```
-
-## Differences from claude-council
-
-This plugin is inspired by [hex/claude-council](https://github.com/hex/claude-council)
-(a Claude Code plugin) but built natively for Antigravity:
-
-| Feature | claude-council | antigravity-council |
-|---------|---------------|-------------------|
-| Platform | Claude Code | Antigravity |
-| Multi-model | External API calls (bash/curl) | Native workflow system |
-| Parallelism | Bash background jobs | Antigravity parallel agents |
-| Models | External APIs + CLIs | All models in your Antigravity subscription |
-| Pane/UI | tmux pane or Claude Code mod | Inline in Antigravity chat |
-| External APIs | Yes (OpenAI, Gemini, Grok, etc.) | Uses Antigravity's built-in models |
-| Setup | API keys required | Zero config — uses your existing subscription |
-
-The key advantage: **zero API keys needed**. Your Antigravity subscription
-already includes Claude, Gemini, and GPT models, so the council works
-out of the box.
+---
 
 ## Contributing
 
-PRs welcome! To add features:
-
-1. Fork this repo
-2. Make your changes
-3. Test by copying to `~/.gemini/config/plugins/antigravity-council/`
-4. Submit a PR
+PRs and new role definitions are welcome! Feel free to open an issue or submit a pull request on GitHub.
 
 ## License
 

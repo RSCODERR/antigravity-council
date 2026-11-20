@@ -13,17 +13,37 @@ description: >-
   answers; a direct request for the council overrides that exclusion.
 ---
 
-# Council Ask — Multi-Model Consultation
+# Council Ask — Multi-Role & Multi-Model Consultation
 
-Query multiple AI models simultaneously and synthesize their perspectives into
-a unified analysis of consensus, divergence, and recommendation.
+Query multiple AI models simultaneously across **specialized analytical roles** (e.g. *Security Auditor*, *Devil's Advocate*, *Performance Architect*, *Simplicity Champion*), run anonymous cross-examination peer review, and synthesize everything into **one definitive, unified verdict**.
 
 ## Overview
 
-The council works by fanning out a question to multiple AI models running in
-parallel — each answers independently without seeing the others — and then
-synthesizing their responses. This surfaces blind spots, confirms strong
-consensus, and highlights where models genuinely disagree.
+The council architecture follows the exact 3-stage deliberation protocol pioneered by `claude-council`:
+
+1. **Stage 1: Role-Divided Parallel Deliberation**
+   Instead of identical generic prompts, each model or seat is assigned a specialized lens (e.g., Security Auditor, Devil's Advocate, Simplicity Champion, Performance Architect). They analyze the problem independently and blind to each other.
+2. **Stage 2: Anonymous Cross-Examination (Peer Review)**
+   Perspectives are anonymized (Perspective A, B, C...) and distributed across members. Each seat critiques the other perspectives, exposing blind spots, groupthink, and false assumptions.
+3. **Stage 3: Chairman Synthesis (Unified Review)**
+   The Council Chairman compiles all transcripts, reconciles conflicting tensions, and generates **one single, unified verdict**.
+
+## Role System & Presets
+
+Available roles from `config/roles.json`:
+- `security`: **Security Auditor** (attack surfaces, auth loopholes, injections, data leaks)
+- `devil`: **Devil's Advocate** (challenges assumptions, failure modes, silent regressions)
+- `performance`: **Performance & Scalability Architect** (concurrency, I/O, bottlenecks, locking)
+- `simplicity`: **Pragmatist & Simplicity Champion** (radical simplicity, over-engineering scrutiny)
+- `maintainability`: **Clean Architecture Advocate** (modularity, technical debt, refactorability)
+- `dx`: **Developer Experience Champion** (ergonomics, local dev friction, debugging ease)
+
+### Built-in Presets:
+- `balanced` (default): `['security', 'performance', 'simplicity']`
+- `architecture`: `['performance', 'maintainability', 'simplicity']`
+- `security-focused`: `['security', 'devil', 'maintainability']`
+- `code-review`: `['security', 'maintainability', 'simplicity']`
+- `adversarial`: `['devil', 'security', 'simplicity']`
 
 ## Step 1: Determine Available Models
 
@@ -112,67 +132,32 @@ Unless the user said not to, gather relevant context before asking:
 3. Append the file contents to the `context` arg so every model sees the same
    code.
 
-## Step 5: Display Results
+## Step 5: Deliver Unified Response
 
-The workflow returns each model's answer. Display them **verbatim** — do not
-reformat, summarize, or abbreviate individual responses. Use this format:
+The council workflow automatically fans out to parallel models, collects their independent deliberations, and runs a **Chairman Synthesis** stage to produce **one single, unified, authoritative response**.
 
-```markdown
----
-
-## 🟢 <Model Display Name>
-
-<model's full response verbatim>
-
----
-
-## 🔵 <Model Display Name>
-
-<model's full response verbatim>
-
----
-```
-
-Use different colored dots to visually distinguish models:
-- 🟢 🔵 🟣 🟠 🔴 🟡
-
-## Step 6: Write the Synthesis
-
-After displaying all responses, write a synthesis under this header:
+Present the final output directly to the user as a cohesive, structured answer:
 
 ```markdown
----
+# 🏛️ Council Verdict & Recommendation
 
-## 🧭 Synthesis
+### 1. Executive Summary & Direct Answer
+<Clear, direct verdict>
+
+### 2. Comprehensive Solution / Proposal
+<Synthesized technical solution / ideas incorporating the council's best points>
+
+### 3. Council Consensus & Key Insights
+<Unanimous findings and fundamental rules agreed upon across models>
+
+### 4. Trade-Offs & Dissenting Viewpoints
+<Alternative perspectives, tension points, or edge cases discussed during deliberation>
+
+### 5. Decisive Action Plan / Next Steps
+<Concrete action items>
 ```
 
-The synthesis has three sections:
-
-### Consensus
-What do the models agree on? List the points of agreement. Agreement is not
-verification — note when models share the same assumption rather than
-independently confirming a fact.
-
-### Divergence
-Where do the models disagree? For each disagreement:
-- State what each model said
-- Explain *why* they likely diverge (different assumptions, different weighting
-  of concerns, different experience domains)
-- Note which position has stronger reasoning, if one clearly does
-
-### Recommendation
-Based on the full picture:
-- State what the evidence supports
-- Name the **premise that could change the answer** — the one assumption that,
-  if wrong, flips the recommendation
-- If the question is context-dependent, say what to check before committing
-
-**Calibration rules for the synthesis:**
-- Never invent consensus. If models genuinely disagree, say so.
-- Never dismiss a minority view without saying why.
-- If all models agree, explicitly note that agreement can mean shared bias, not
-  independent confirmation.
-- Name the strongest counterargument to your recommendation.
+> **Note:** If the user explicitly asks to inspect raw individual drafts (e.g. `show raw answers` or `--raw`), pass `"show_individual": true` in the workflow args. Otherwise, always deliver the clean, unified council answer.
 
 ## Error Handling
 
