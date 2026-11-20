@@ -1,18 +1,29 @@
 {
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
   "name": "antigravity-council",
   "displayName": "Antigravity Council",
   "version": "1.0.0",
-  "description": "Consult multiple AI models in parallel — Claude, Gemini, GPT and more — to get diverse perspectives on architecture decisions, debugging dead-ends, security reviews, framework choices, and any question where one model's bias could mislead you. Answers arrive side by side with a synthesis of consensus, divergence, and recommendation.",
+  "description": "Multi-role AI council with anonymous cross-examination that delivers one unified review for architecture, security, and debugging decisions.",
   "author": {
     "name": "akash",
     "url": "https://github.com/akash"
   },
   "homepage": "https://github.com/akash/antigravity-council",
   "repository": "https://github.com/akash/antigravity-council",
+  "license": "MIT",
+  "keywords": [
+    "council",
+    "multi-agent",
+    "multi-model",
+    "code-review",
+    "security",
+    "architecture",
+    "claude-council"
+  ],
   "logo": "assets/logo.svg",
   "suggestedPrompts": [
-    "Ask the council: Should I use UUID or BIGINT primary keys for a SaaS users table?",
-    "Council review: Is our authentication flow secure?",
-    "Get the council's take: SQLite vs Postgres for a single-node demo app"
+    "Ask the council: Should I use SQLite or Postgres for a multi-tenant B2B SaaS MVP?",
+    "Council review (security-focused): Audit our authentication and session architecture",
+    "Ask the council (adversarial): Stress test our database migration plan"
   ]
 }
