@@ -1,0 +1,18 @@
+{
+  "name": "antigravity-council",
+  "displayName": "Antigravity Council",
+  "version": "1.0.0",
+  "description": "Consult multiple AI models in parallel — Claude, Gemini, GPT and more — to get diverse perspectives on architecture decisions, debugging dead-ends, security reviews, framework choices, and any question where one model's bias could mislead you. Answers arrive side by side with a synthesis of consensus, divergence, and recommendation.",
+  "author": {
+    "name": "akash",
+    "url": "https://github.com/akash"
+  },
+  "homepage": "https://github.com/akash/antigravity-council",
+  "repository": "https://github.com/akash/antigravity-council",
+  "logo": "assets/logo.svg",
+  "suggestedPrompts": [
+    "Ask the council: Should I use UUID or BIGINT primary keys for a SaaS users table?",
+    "Council review: Is our authentication flow secure?",
+    "Get the council's take: SQLite vs Postgres for a single-node demo app"
+  ]
+}
